@@ -41,6 +41,7 @@ var options = {
     newtab: path.join(__dirname, 'src', 'pages', 'Newtab', 'index.jsx'),
     options: path.join(__dirname, 'src', 'pages', 'Options', 'index.jsx'),
     popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.jsx'),
+    popupJs: path.join(__dirname, 'src', 'pages', 'Popup', 'Popup.js'),
     background: path.join(__dirname, 'src', 'pages', 'Background', 'index.js'),
     contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.js'),
     devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.js'),
@@ -53,6 +54,7 @@ var options = {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'build'),
     clean: true,
+    module: true,
     publicPath: ASSET_PATH,
   },
   module: {
@@ -116,8 +118,13 @@ var options = {
           {
             loader: require.resolve('babel-loader'),
             options: {
+              presets: [
+                require.resolve('@babel/preset-env'),
+                require.resolve('@babel/preset-react')
+              ],
               plugins: [
                 isDevelopment && require.resolve('react-refresh/babel'),
+                require.resolve('@babel/plugin-syntax-top-level-await'),
               ].filter(Boolean),
             },
           },
@@ -132,8 +139,12 @@ var options = {
       .map((extension) => '.' + extension)
       .concat(['.js', '.jsx', '.ts', '.tsx', '.css']),
   },
+  experiments: {
+    topLevelAwait: true,
+    outputModule: true
+  },
   plugins: [
-    isDevelopment && new ReactRefreshWebpackPlugin(),
+    isDevelopment && new ReactRefreshWebpackPlugin({ overlay: false }),
     new CleanWebpackPlugin({ verbose: false }),
     new webpack.ProgressPlugin(),
     // expose and write the allowed env vars on the compiled bundle
@@ -199,7 +210,7 @@ var options = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src', 'pages', 'Popup', 'index.html'),
       filename: 'popup.html',
-      chunks: ['popup'],
+      chunks: ['popup', 'popupJs'],
       cache: false,
     }),
     new HtmlWebpackPlugin({

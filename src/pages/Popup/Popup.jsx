@@ -6,20 +6,21 @@ import './Popup.css';
 const Popup = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/pages/Popup/Popup.jsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React!
+      <template id="li_template">
+      <li>
+        <a>
+          <h3 class="title">Tab Title</h3>
+          <p class="pathname">Tab Pathname</p>
         </a>
-      </header>
+      </li>
+      </template>
+
+      <h1>Blacklister</h1>
+      <button id="blacklist">Blacklist this website</button>
+      <button id="remove blacklist">Remove this website from blacklist</button>
+      <ul></ul>
+
+      <script src="./popupJs.bundle.js" type="module"></script>
     </div>
   );
 };
