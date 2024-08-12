@@ -41,7 +41,6 @@ var options = {
     newtab: path.join(__dirname, 'src', 'pages', 'Newtab', 'index.jsx'),
     options: path.join(__dirname, 'src', 'pages', 'Options', 'index.jsx'),
     popup: path.join(__dirname, 'src', 'pages', 'Popup', 'index.jsx'),
-    popupJs: path.join(__dirname, 'src', 'pages', 'Popup', 'Popup.js'),
     background: path.join(__dirname, 'src', 'pages', 'Background', 'index.js'),
     contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.js'),
     devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.js'),
@@ -124,7 +123,6 @@ var options = {
               ],
               plugins: [
                 isDevelopment && require.resolve('react-refresh/babel'),
-                require.resolve('@babel/plugin-syntax-top-level-await'),
               ].filter(Boolean),
             },
           },
@@ -133,6 +131,7 @@ var options = {
       },
     ],
   },
+  devtool: 'cheap-module-source-map',
   resolve: {
     alias: alias,
     extensions: fileExtensions

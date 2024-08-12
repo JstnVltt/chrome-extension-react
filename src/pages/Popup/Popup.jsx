@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from '../../assets/img/logo.svg';
-import Greetings from '../../containers/Greetings/Greetings';
-import './Popup.css';
+import {addUrl, removeURL, printBlacklist} from './Popup.js';
+import Button from './Button.jsx';
 
 const Popup = () => {
   return (
@@ -16,8 +16,9 @@ const Popup = () => {
       </template>
 
       <h1>Blacklister</h1>
-      <button id="blacklist">Blacklist this website</button>
-      <button id="remove blacklist">Remove this website from blacklist</button>
+
+      <Button id="blacklist" functionURL={addUrl} >Blacklist this website</Button>
+      <Button id = "remove blacklist" functionURL={removeURL}>Remove this website from blacklist</Button>
       <ul></ul>
 
       <script src="./popupJs.bundle.js" type="module"></script>
