@@ -2,7 +2,7 @@ console.log('This is the background page.');
 console.log('Put the background scripts here.');
 
 
-async function checkCurrentURL() {
+/* async function checkCurrentURL() {
     let { urls } = await chrome.storage.local.get('urls');
     if (!urls) { urls = []; }
 
@@ -27,4 +27,4 @@ chrome.alarms.create('notifyAlarm', { periodInMinutes: 0.083333333 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === 'notifyAlarm') { checkCurrentURL(); }
-});
+}); */
