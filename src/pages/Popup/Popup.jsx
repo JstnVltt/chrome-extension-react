@@ -1,35 +1,45 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import logo from '../../assets/img/logo.svg';
-import Greetings from '../../containers/Greetings/Greetings';
 import './Popup.css';
 
 const Popup = () => {
+  const [urls, setUrls] = useState([]);
   const [isBlacklisted, setIsBlacklisted] = useState(false);
-  useEffect(async () => {
-    // Trouve un moyen de passer isBlacklisted à true si l'url actuelle est dans la liste des urls
-    // Tu peux utiliser chrome.storage.local.get('urls') pour obtenir la liste des urls
+  useEffect(() => {
+
+  async function updateUrls() {
     const { urls } = await chrome.storage.local.get('urls');
-    if (!urls) { await chrome.storage.local.set({ urls: [] }); };
+    setUrls(urls ? urls : []); 
+  }
+  updateUrls();
+    
+
+  async function checkBlacklisted() {
+    const bool = await isURLAdded();
+    bool ? setIsBlacklisted(true) : setIsBlacklisted(false);
+  }
+  checkBlacklisted();
   }, []);
+
+
+
 
   return (
     <div className="App">
       <header className="App-header">
         {isBlacklisted ? (
-          <p>Ce site est déjà blacklisté</p>
+          <button onClick={async () => removeURL()}>Remove this website from blacklist</button>
         ) : (
           <button onClick={async () => addURL()}>Blacklist this website</button>
         )}
 
-        <button
-          onClick={async () => {
-            const urls = await chrome.storage.local.get('urls');
-            console.log(urls);
-          }}
-        >
-          read list
-        </button>
+        <ul>
+          { 
+          urls.map((url) =>
+            <li key={url}>{url}</li>
+          ) }
+        </ul>
       </header>
     </div>
   );
@@ -49,8 +59,8 @@ async function addURL() {
 
 async function removeURL() {
   const urlToRemove = await getURL();
-  let { urls } = await chrome.storage.local.get('urls');
-  if (urls.includes(urlToRemove)) { window.alert("This website is not blacklisted!"); return; }
+  const { urls } = await chrome.storage.local.get('urls');
+  if (!urls.includes(urlToRemove)) { console.log("This website is not blacklisted!"); return; }
 
   const newURLs = urls.filter(url => url !== urlToRemove); await chrome.storage.local.set({ urls: newURLs });
 }
@@ -58,6 +68,13 @@ async function removeURL() {
 async function getURL() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   return tab.url;
+}
+
+async function isURLAdded() {
+  const currentURL = await getURL();
+  const { urls } = await chrome.storage.local.get('urls');
+  if (urls.includes(currentURL)) { return true; }
+  return false;
 }
 
 /* function cleanDebug() {
