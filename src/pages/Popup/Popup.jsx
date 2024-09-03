@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import logo from '../../assets/img/logo.svg';
 import './Popup.css';
 
 const Popup = () => {
@@ -8,18 +7,20 @@ const Popup = () => {
   const [isBlacklisted, setIsBlacklisted] = useState(false);
   useEffect(() => {
 
-  async function updateUrls() {
-    const { urls } = await chrome.storage.local.get('urls');
-    setUrls(urls ? urls : []); 
-  }
-  updateUrls();
-    
+    async function updateUrls() {
+      const { urls } = await chrome.storage.local.get('urls');
+      const realUrls = urls ? urls : []; await chrome.storage.local.set({ urls: [] });
+      setUrls(realUrls);
+    }
+    updateUrls();
+    console.log("urls juste après updateUrls : ", urls);
 
-  async function checkBlacklisted() {
-    const bool = await isURLAdded();
-    bool ? setIsBlacklisted(true) : setIsBlacklisted(false);
-  }
-  checkBlacklisted();
+
+    async function checkBlacklisted() {
+      const bool = await isURLAdded();
+      bool ? setIsBlacklisted(true) : setIsBlacklisted(false);
+    }
+    checkBlacklisted();
   }, []);
 
 
@@ -35,10 +36,10 @@ const Popup = () => {
         )}
 
         <ul>
-          { 
-          urls.map((url) =>
-            <li key={url}>{url}</li>
-          ) }
+          {
+            urls.map((url) =>
+              <li key={url}>{url}</li>
+            )}
         </ul>
       </header>
     </div>
@@ -73,6 +74,9 @@ async function getURL() {
 async function isURLAdded() {
   const currentURL = await getURL();
   const { urls } = await chrome.storage.local.get('urls');
+  console.log("CurrentURL dans isURLAdded :", currentURL);
+  console.log("urls dans isURLAdded :", urls);
+
   if (urls.includes(currentURL)) { return true; }
   return false;
 }
