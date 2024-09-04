@@ -19,7 +19,7 @@ async function checkCurrentURL() {
 
 async function getURL() {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (!tab) { console.error("Error in background : can't retreive tab."); return; }
+    if (!tab) { console.error("Error in background : can't retreive tab. (Make sure to click on the main window to activate it.)"); return; }
 
     return tab.url;
 }
