@@ -9,12 +9,11 @@ const Popup = () => {
 
     async function updateUrls() {
       const { urls } = await chrome.storage.local.get('urls');
-      const realUrls = urls ? urls : []; await chrome.storage.local.set({ urls: [] });
+      const realUrls = urls ? urls : [];
+      if (realUrls == []) await chrome.storage.local.set({ urls: [] });
       setUrls(realUrls);
     }
     updateUrls();
-    console.log("urls juste après updateUrls : ", urls);
-
 
     async function checkBlacklisted() {
       const bool = await isURLAdded();
@@ -68,14 +67,14 @@ async function removeURL() {
 
 async function getURL() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (!tab) { console.error("Error in background : can't retreive tab."); return; }
+
   return tab.url;
 }
 
 async function isURLAdded() {
   const currentURL = await getURL();
   const { urls } = await chrome.storage.local.get('urls');
-  console.log("CurrentURL dans isURLAdded :", currentURL);
-  console.log("urls dans isURLAdded :", urls);
 
   if (urls.includes(currentURL)) { return true; }
   return false;
