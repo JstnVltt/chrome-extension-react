@@ -23,8 +23,6 @@ const Popup = () => {
   }, []);
 
 
-
-
   return (
     <div className="App">
       <header className="App-header">
@@ -33,6 +31,9 @@ const Popup = () => {
         ) : (
           <button onClick={async () => addURL()}>Blacklist this website</button>
         )}
+
+        <button onClick={async () => recommandURL()}>Recommand me a website to blacklist (AI)</button>
+
 
         <ul>
           {
@@ -79,6 +80,20 @@ async function isURLAdded() {
   if (urls.includes(currentURL)) { return true; }
   return false;
 }
+
+async function recommandURL() {
+  const prompt = `you are in charge of evaluating if the urls i'm giving you are productive platform (work friendly) or improductive. if the array is not [], return an array of 
+  objects like that :   [{url:'http://example.com',isProductive:true'},{url:'http://example2.com',isProductive:false'}. 
+  if the list of urls is empty (entry : []), return directly the following string : "no urls to recommend, you are very productive!"`;
+  const urlsTimestamp = chrome.storage.local.get('urlsTimestamp');
+  const session = await ai.assistant.create({
+    systemPrompt: prompt
+  });
+  const result = await session.prompt([]);
+  console.log("Result of the prompt : ", result);
+  session.destroy();
+}
+
 
 /* function cleanDebug() {
   chrome.storage.local.set({ urls: [] });

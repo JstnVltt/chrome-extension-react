@@ -5,7 +5,10 @@ console.log('Put the background scripts here.');
 
 let timeSpent = 0;
 let startTime;
-let urlsTimestamp = {};
+let { getUrlsTimestamp } = await chrome.storage.local.get('urlsTimestamp');
+const urlsTimestamp = getUrlsTimestamp ? getUrlsTimestamp : {};
+console.log("Récupération de urlTimestamp ", JSON.stringify(urlsTimestamp, null, 2));
+
 let tabTimed;
 
 async function checkCurrentURL() {
@@ -55,9 +58,10 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
     startTime = new Date().getTime();
 
     console.log("urlTimestamp dans onActivated : ", JSON.stringify(urlsTimestamp, null, 2));
+    await chrome.storage.local.set({ urlsTimestamp: urlsTimestamp });
 });
 
-chrome.tabs.onRemoved.addListener((tabId) => {
+chrome.tabs.onRemoved.addListener(async (tabId) => {
     if (startTime) {
         const endTime = new Date().getTime();
         timeSpent = (endTime - startTime) / 1000;
@@ -69,9 +73,10 @@ chrome.tabs.onRemoved.addListener((tabId) => {
         tabTimed = null;
     }
     console.log("urlTimestamp dans onRemoved : ", JSON.stringify(urlsTimestamp, null, 2));
+    await chrome.storage.local.set({ urlsTimestamp: urlsTimestamp });
 })
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (changeInfo.status === 'complete' && startTime) {
         const endTime = new Date().getTime();
         timeSpent = (endTime - startTime) / 1000;
@@ -83,5 +88,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         startTime = new Date().getTime();
     }
     console.log("urlTimestamp dans onUpdated: ", JSON.stringify(urlsTimestamp, null, 2));
+    await chrome.storage.local.set({ urlsTimestamp: urlsTimestamp });
 })
 
