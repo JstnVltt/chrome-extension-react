@@ -113,7 +113,7 @@ productive. outlook and gmail are both websites that contribute in being product
 co-workers
 
 
-Real entry : {snapchat.com: 8888, microsoft.teams.com: 50000, gmail.com: 6000, stackoverflow.com: 50000, tiktok.com: 6000}
+Real entry : ${urlsTimestamp}
 Output : `;
 
   console.log("AI loading answer, please wait...");
