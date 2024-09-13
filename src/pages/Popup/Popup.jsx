@@ -83,24 +83,40 @@ async function isURLAdded() {
 
 async function recommandURL() {
   const urlsTimestamp = chrome.storage.local.get('urlsTimestamp');
-  const prompt = `I am a javascript program. I have a dictionnary of urls named "Dictionnary" linked to the time spent by the user on each of them. 
-  My objective is to find urls to blacklist to make the user more productive. I will give you this dictionnary and I want you to take in account the time associated with each url, 
-  as well as the type of url in regard of being productive, and give me in response with no code an array of urls included in this dictionnary that should be blacklisted to 
-  gain productivity. If it's related to social media or spending a lot of time on an entertainment, label it as non-productive. If it is ambiguous and has a abnormal amount of time, 
-  label it as non-productive. The output should have a maximum size of 3, have the name "Array" and should strictly have urls that are in the variable "Dictionnary". If you encounter a line with "// Example", you should avoid returning this line as a result. 
-  If Dictionnary is "{}", say "No recommendation needed, you are very productive !". Every "Entry / Output" lines are examples for you to train and should be isolated 
-  from the content of Dictionnary. If you are unsure about something, ask me questions. Examples:
-Entry : {}
-Output : "No recommendation needed, you are very productive !" // Example
-Entry : {youtube.com: 567, linkedin.com: 6000: google.com: 500}
-Output : [youtube.com, linkedin.com] // Example
-Entry : {tiktok.com: 60, origami.com: 45, outlook.com: 780}
-Output : [tiktok.com, origami.com] // Example
-Entry : {minecraft.com: 500, gmail.com: 70}
-Output : [minecraft.com] // Example
+  const prompt = `I give you an entry with urls and time spent on them in seconds. Answer with no code with these instructions :
+i want you to give me an array of urls that are present in the real entry that are not productive for work. These criterias
+make an url not productve : time consuming, entertainment, high dopamine.
+On contrary, these criterias make urls productive and therefore not shown on the output : exchanging by emails, 
+coding related, research related, office, productivity, communicating with co-workers, giving knowledge or facts. Don't give me an explaination.
+Examples :
+Example 1 :
+Entry : {tiktok.com:6666, google.com:20}
+Output : [tiktok.com]
+Explaination : tiktok is a social media that drains time and is not productive.
 
-Dictionnary :  ${urlsTimestamp}
-Array :`;
+Example 2 :
+Entry : {origami.com: 50, gmail.com: 7777, youtube.com: 500}
+Output : [youtube.com]
+explaination : origami.com is not related to work but has low time spent compared to other urls. Youtube has a high time and is not linked to work, so not productive. gmail has a really high time spent but is used to work with co-workers and is productive.
+
+Example 3 :
+Entry : {gmail.com: 6000, google.com: 5000, outlook.com: 7000}
+Output : []
+explaination : all the urls are considered as productive because they are used to search (google.com) or to communicate with others (gmail.com, outlook.com).
+
+Example 4 :
+Entry : {instagram.com.com: 8888, gmail.com: 50000, outlook: 500, linkedin.com: 6000}
+Output : [instagram.com, linkedin.com]
+Explaination : instagram is a social media with potential of time retention and is not linked to work so does'nt contribute
+to being productive. Even though linkedin can be seen as productive, the amount of time is too high to considere it being
+productive. outlook and gmail are both websites that contribute in being productive byy the mean of sending emails to 
+co-workers
+
+
+Real entry : {snapchat.com: 8888, microsoft.teams.com: 50000, gmail.com: 6000, stackoverflow.com: 50000, tiktok.com: 6000}
+Output : `;
+
+  console.log("AI loading answer, please wait...");
   const session = await ai.assistant.create({
     systemPrompt: prompt
   });

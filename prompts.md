@@ -1,5 +1,4 @@
 # Prompt 1
-
 you are in charge of evaluating if the urls i'm giving you are productive platform (work friendly) or improductive. 
 Give me your advice as a friend on what you think should be blacklisted. If the website has potential of time drain, 
 like doomscroll or high dopamine content, it should be blacklisted. I will give you an entry and depending on the content 
@@ -11,7 +10,6 @@ productive! I want you to give me directly the answer, like you would give it to
 Entry : [twitter.com, notion.com, facebook.com, stackoverflow.com, youtube.com, tiktok.com, gmail.com, origami.com]
 
 # Prompt 2
-
 I give you an entry with urls and time spent on them in seconds. Answer with no code with these instructions :
 i want you to give me an array of urls that are present in the real entry that are not productive for work. These criterias
 make an url not productve : time consuming, entertainment, high dopamine.
@@ -49,3 +47,23 @@ Output :
 i want you to set Blacklisted to Yes if the website is a social media. Give me an answer similar to this one : 
 [twitter.com: Yes, notion.com: no]
 Entry : [tiktok.com, google.com, microsoft.teams.com, linkedin.com, stackoverflow.com] 
+
+# Prompt 4
+I am a javascript program. I have a dictionnary of urls named "Dictionnary" linked to the time spent by the user on each of them. 
+  My objective is to find urls to blacklist to make the user more productive. I will give you this dictionnary and I want you to take in account the time associated with each url, 
+  as well as the type of url in regard of being productive, and give me in response with no code an array of urls included in this dictionnary that should be blacklisted to 
+  gain productivity. If it's related to social media or spending a lot of time on an entertainment, label it as non-productive. If it is ambiguous and has a abnormal amount of time, 
+  label it as non-productive. The output should have a maximum size of 3, have the name "Array" and should strictly have urls that are in the variable "Dictionnary". If you encounter a line with "// Example", you should avoid returning this line as a result. 
+  If Dictionnary is "{}", say "No recommendation needed, you are very productive !". Every "Entry / Output" lines are examples for you to train and should be isolated 
+  from the content of Dictionnary. If you are unsure about something, ask me questions. Examples:
+Entry : {}
+Output : "No recommendation needed, you are very productive !" // Example
+Entry : {youtube.com: 567, linkedin.com: 6000: google.com: 500}
+Output : [youtube.com, linkedin.com] // Example
+Entry : {tiktok.com: 60, origami.com: 45, outlook.com: 780}
+Output : [tiktok.com, origami.com] // Example
+Entry : {minecraft.com: 500, gmail.com: 70}
+Output : [minecraft.com] // Example
+
+Dictionnary :  ${urlsTimestamp}
+Array :
