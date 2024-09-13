@@ -82,10 +82,25 @@ async function isURLAdded() {
 }
 
 async function recommandURL() {
-  const prompt = `you are in charge of evaluating if the urls i'm giving you are productive platform (work friendly) or improductive. if the array is not [], return an array of 
-  objects like that :   [{url:'http://example.com',isProductive:true'},{url:'http://example2.com',isProductive:false'}. 
-  if the list of urls is empty (entry : []), return directly the following string : "no urls to recommend, you are very productive!"`;
   const urlsTimestamp = chrome.storage.local.get('urlsTimestamp');
+  const prompt = `I am a javascript program. I have a dictionnary of urls named "Dictionnary" linked to the time spent by the user on each of them. 
+  My objective is to find urls to blacklist to make the user more productive. I will give you this dictionnary and I want you to take in account the time associated with each url, 
+  as well as the type of url in regard of being productive, and give me in response with no code an array of urls included in this dictionnary that should be blacklisted to 
+  gain productivity. If it's related to social media or spending a lot of time on an entertainment, label it as non-productive. If it is ambiguous and has a abnormal amount of time, 
+  label it as non-productive. The output should have a maximum size of 3, have the name "Array" and should strictly have urls that are in the variable "Dictionnary". If you encounter a line with "// Example", you should avoid returning this line as a result. 
+  If Dictionnary is "{}", say "No recommendation needed, you are very productive !". Every "Entry / Output" lines are examples for you to train and should be isolated 
+  from the content of Dictionnary. If you are unsure about something, ask me questions. Examples:
+Entry : {}
+Output : "No recommendation needed, you are very productive !" // Example
+Entry : {youtube.com: 567, linkedin.com: 6000: google.com: 500}
+Output : [youtube.com, linkedin.com] // Example
+Entry : {tiktok.com: 60, origami.com: 45, outlook.com: 780}
+Output : [tiktok.com, origami.com] // Example
+Entry : {minecraft.com: 500, gmail.com: 70}
+Output : [minecraft.com] // Example
+
+Dictionnary :  ${urlsTimestamp}
+Array :`;
   const session = await ai.assistant.create({
     systemPrompt: prompt
   });
