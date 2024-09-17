@@ -69,7 +69,7 @@ Dictionnary :  ${urlsTimestamp}
 Array :
 
 --------------------------------------------------------------
-# Prompt stable (marche également avec {})
+# Prompt stable
 you are in charge of evaluating if the urls i'm giving you are productive platform (work friendly) or improductive. 
 If the website has potential of time drain, is a social media or has too much time associated, it should be blacklisted. 
 I will give you an entry and depending on the content of this entry, your answer has to be different. : 
@@ -88,7 +88,11 @@ Entry : {
 Output :
 
 ```
-Problèmes potentiels :
+Remarques :
+- fonctionne également avec {} en entrée (affiche "no urls to recommend).
+- est flexible au niveau des temps donnés.
+
+Problèmes :
 - ne fonctionne plus correctement après 5 urls. Affiche des "true" de partout.
 - ne fonctionne plus si on lui met des urls trop longues ou bizarre comme [object Object] ou "". Besoin d'assainir l'entrée. 
 ```
