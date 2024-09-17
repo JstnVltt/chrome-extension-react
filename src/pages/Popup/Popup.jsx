@@ -83,38 +83,22 @@ async function isURLAdded() {
 
 async function recommandURL() {
   const urlsTimestamp = chrome.storage.local.get('urlsTimestamp');
-  const prompt = `I give you an entry with urls and time spent on them in seconds. Answer with no code with these instructions :
-i want you to give me an array of urls that are present in the real entry that are not productive for work. These criterias
-make an url not productve : time consuming, entertainment, high dopamine.
-On contrary, these criterias make urls productive and therefore not shown on the output : exchanging by emails, 
-coding related, research related, office, productivity, communicating with co-workers, giving knowledge or facts. Don't give me an explaination.
-Examples :
-Example 1 :
-Entry : {tiktok.com:6666, google.com:20}
-Output : [tiktok.com]
-Explaination : tiktok is a social media that drains time and is not productive.
+  const prompt = `you are in charge of evaluating if the urls i'm giving you are productive platform (work friendly) or improductive. 
+If the website has potential of time drain, is a social media or has too much time associated, it should be blacklisted. 
+I will give you an entry and depending on the content of this entry, your answer has to be different. : 
+if the array is like '{"url": time}', give me an array of objects like that :   
+[{url:'http://example.com',isProductive:true'},{url:'http://example2.com',isProductive:false'}] depending on the time 
+associated with each url and on the url. 
+If the entry is '{}', give me directly the following string : "no urls to recommend". I want you to give me directly the answer, like you would give it to a friend, not in terms of code.
 
-Example 2 :
-Entry : {origami.com: 50, gmail.com: 7777, youtube.com: 500}
-Output : [youtube.com]
-explaination : origami.com is not related to work but has low time spent compared to other urls. Youtube has a high time and is not linked to work, so not productive. gmail has a really high time spent but is used to work with co-workers and is productive.
-
-Example 3 :
-Entry : {gmail.com: 6000, google.com: 5000, outlook.com: 7000}
-Output : []
-explaination : all the urls are considered as productive because they are used to search (google.com) or to communicate with others (gmail.com, outlook.com).
-
-Example 4 :
-Entry : {instagram.com.com: 8888, gmail.com: 50000, outlook: 500, linkedin.com: 6000}
-Output : [instagram.com, linkedin.com]
-Explaination : instagram is a social media with potential of time retention and is not linked to work so does'nt contribute
-to being productive. Even though linkedin can be seen as productive, the amount of time is too high to considere it being
-productive. outlook and gmail are both websites that contribute in being productive byy the mean of sending emails to 
-co-workers
-
-
-Real entry : ${urlsTimestamp}
-Output : `;
+Entry : {
+  "https://chrome.dev/web-ai-demos/prompt-api-playground/": 4.835,
+  "https://www.linkedin.com/": 92.984,
+  "https://stackoverflow.com/": 181.903,
+  "https://www.gmail.com/": 1.178,
+  "https://www.tiktok.com/": 186.333
+}
+Output :`;
 
   console.log("AI loading answer, please wait...");
   const session = await ai.assistant.create({

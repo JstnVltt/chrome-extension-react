@@ -14,7 +14,7 @@ I give you an entry with urls and time spent on them in seconds. Answer with no 
 i want you to give me an array of urls that are present in the real entry that are not productive for work. These criterias
 make an url not productve : time consuming, entertainment, high dopamine.
 On contrary, these criterias make urls productive and therefore not shown on the output : exchanging by emails, 
-coding related, research related, office, productivity, communicating with co-workers, giving knowledge or facts. Don't give me an explaination.
+coding related, research related, office, productivity, communicating with co-workers, giving knowledge or facts.
 Examples :
 Example 1 :
 Entry : {tiktok.com:6666, google.com:20}
@@ -67,3 +67,29 @@ Output : [minecraft.com] // Example
 
 Dictionnary :  ${urlsTimestamp}
 Array :
+
+--------------------------------------------------------------
+# Prompt stable (marche également avec {})
+you are in charge of evaluating if the urls i'm giving you are productive platform (work friendly) or improductive. 
+If the website has potential of time drain, is a social media or has too much time associated, it should be blacklisted. 
+I will give you an entry and depending on the content of this entry, your answer has to be different. : 
+if the array is like '{"url": time}', give me an array of objects like that :   
+[{url:'http://example.com',isProductive:true'},{url:'http://example2.com',isProductive:false'}] depending on the time 
+associated with each url and on the url. 
+If the entry is '{}', give me directly the following string : "no urls to recommend". I want you to give me directly the answer, like you would give it to a friend, not in terms of code.
+
+Entry : {
+  "https://chrome.dev/web-ai-demos/prompt-api-playground/": 4.835,
+  "https://www.linkedin.com/": 92.984,
+  "https://stackoverflow.com/": 181.903,
+  "https://www.gmail.com/": 1.178,
+  "https://www.tiktok.com/": 186.333
+}
+Output :
+
+```
+Problèmes potentiels :
+- ne fonctionne plus correctement après 5 urls. Affiche des "true" de partout.
+- ne fonctionne plus si on lui met des urls trop longues ou bizarre comme [object Object] ou "". Besoin d'assainir l'entrée. 
+```
+
